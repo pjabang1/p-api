@@ -1,0 +1,34 @@
+pension_fund:
+    path:     /
+    defaults: { _controller: PensionFundBundle:Fund:index }
+pension_fund_funds:
+    path:     /funds
+    defaults: { _controller: PensionFundBundle:Fund:funds }
+pension_fund_countries:
+    path:     /countries
+    defaults: { _controller: PensionFundBundle:Fund:countries }
+pension_fund_autocomplete:
+    path:     /autocomplete
+    defaults: { _controller: PensionFundBundle:Fund:autocomplete }
+pension_fund_sectors:
+    path:     /sectors
+    defaults: { _controller: PensionFundBundle:Fund:sectors }
+pension_fund_details:
+    path:     /details
+    defaults: { _controller: PensionFundBundle:Fund:details }
+    
+pension_list_countries:
+    path:     /list/countries
+    defaults: { _controller: PensionFundBundle:List:countries }
+
+pension_list_fundtypes:
+    path:     /list/fundtypes
+    defaults: { _controller: PensionFundBundle:List:fundtypes }
+    
+pension_list_fundcategories:
+    path:     /list/fundcategories
+    defaults: { _controller: PensionFundBundle:List:fundcategories }
+
+pension_list_sectors:
+    path:     /list/sectors
+    defaults: { _controller: PensionFundBundle:List:sectors }

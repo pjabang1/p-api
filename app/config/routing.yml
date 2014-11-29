@@ -1,0 +1,4 @@
+pension_fund:
+    resource: "@PensionFundBundle/Resources/config/routing.yml"
+    prefix:   /fund
+
