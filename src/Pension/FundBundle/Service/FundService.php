@@ -2,16 +2,14 @@
 
 namespace Pension\FundBundle\Service;
 
+class FundService {
 
-class FundService 
-{
-	
 	/**
 	 *
 	 * @var \Doctrine\DBAL\Driver\Connection 
 	 */
 	protected $connection;
-	
+
 	/**
 	 * 
 	 * @return \Doctrine\DBAL\Driver\Connection
@@ -29,37 +27,39 @@ class FundService
 		$this->connection = $connection;
 		return $this;
 	}
-	
+
 	/**
 	 * 
 	 * @param type $fund
 	 */
 	public function getFunds() {
-		
-		$sql = "SELECT * FROM pensionfunds";
-		
+
+		// $sql = "SELECT pensionfunds.* FROM pensionfunds";
+
+		$sql = "select pensionfunds.* FROM pensionfunds 
+		LEFT JOIN mappingfifundtoisin ON mappingfifundtoisin.isin = pensionfunds.isin 
+			WHERE mappingfifundtoisin.institutnr_fond != 0";
+
 		return $this->getConnection()->fetchAll($sql, array());
 	}
-	
-		
+
 	/**
 	 * 
 	 * @param type $fund
 	 */
 	public function getAutocomplete() {
-		
+
 		$sql = "SELECT fondnamn FROM pensionfunds";
-		
+
 		return $this->getConnection()->fetchAll($sql, array());
 	}
-	
-	
+
 	/**
 	 * 
 	 * @param type $fund
 	 */
 	public function getCountries($fund) {
-		
+
 		$sql = "SELECT ppmfunddetailswithsectors.isin,
     ppmfunddetailswithsectors.fondnummer,
     ppmfunddetailswithsectors.fondnamn,
@@ -71,16 +71,16 @@ class FundService
    FROM ppmfunddetailswithsectors 
    WHERE ppmfunddetailswithsectors.fondnummer = ?
   GROUP BY ppmfunddetailswithsectors.isin, ppmfunddetailswithsectors.fondnummer, ppmfunddetailswithsectors.fondnamn, ppmfunddetailswithsectors.valuta, ppmfunddetailswithsectors.iso3, ppmfunddetailswithsectors.countryname, ppmfunddetailswithsectors.country_number";
-		
+
 		return $this->getConnection()->fetchAll($sql, array($fund));
 	}
-	
+
 	/**
 	 * 
 	 * @param type $fund
 	 */
 	public function getSectors($fund) {
-				$sql = "SELECT ppmfunddetailswithsectors.isin,
+		$sql = "SELECT ppmfunddetailswithsectors.isin,
     ppmfunddetailswithsectors.fondnummer,
     ppmfunddetailswithsectors.fondnamn,
     ppmfunddetailswithsectors.valuta,
@@ -88,17 +88,16 @@ class FundService
     sum(ppmfunddetailswithsectors.holdingpercent) AS holdingpercent
    FROM ppmfunddetailswithsectors WHERE ppmfunddetailswithsectors.fondnummer = ? 
   GROUP BY ppmfunddetailswithsectors.isin, ppmfunddetailswithsectors.fondnummer, ppmfunddetailswithsectors.fondnamn, ppmfunddetailswithsectors.valuta, ppmfunddetailswithsectors.sector";
-		
+
 		return $this->getConnection()->fetchAll($sql, array($fund));
-		
 	}
-	
+
 	/**
 	 * 
 	 * @param type $fund
 	 */
 	public function getDetails($fund) {
-				$sql = 'SELECT pensionfunds.fondbolag,
+		$sql = 'SELECT pensionfunds.fondbolag,
     pensionfunds.fondnummer,
     pensionfunds.fondnamn,
     pensionfunds.valuta,
@@ -142,14 +141,8 @@ class FundService
      LEFT JOIN countriesiso ON fifundholdingsdata.land::bpchar = countriesiso.code
      LEFT JOIN fundsectors ON fifundholdingsdata.isin::text = fundsectors.isin::text 
 	 WHERE pensionfunds.fondnummer = ?';
-		
+
 		return $this->getConnection()->fetchAll($sql, array($fund));
-		
 	}
-	
-	
 
-
-	
 }
-
